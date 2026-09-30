@@ -1,0 +1,50 @@
+# Requirements for a SMALL / FREE host (e.g. Render free: 512 MB RAM).
+#
+# Use requirements.txt instead when running on a machine with enough RAM and
+# disk for the local W2V-BERT / Whisper / NLLB models (~6 GB) as an offline
+# fallback.
+#
+# What is dropped here and why:
+#   torch, torchaudio, transformers, accelerate, safetensors, sentencepiece
+#     -> only needed by the LOCAL model fallbacks (transcribe_with_local_model,
+#        transcribe_with_whisper_local, common/nllb.py, common/opus_mt.py).
+#        They are already imported lazily inside those functions, so the app
+#        starts and transcribes fine without them. With no OPENAI_API_KEY the
+#        app will report that no transcription engine is available.
+#
+# What is KEPT and why (needed even on the OpenAI API path):
+#   numpy, librosa, soundfile
+#     -> transcribe_with_whisper() loads the audio, runs quality analysis,
+#        applies the high-pass filter + VAD trim in preprocess_audio_for_asr(),
+#        segments into chunks, and writes the chunk WAVs. librosa pulls in
+#        numba/llvmlite, which is the bulk of the install size, but it cannot
+#        be dropped without rewriting the audio preprocessing.
+#
+# Install:  pip install -r requirements-host.txt
+
+# ── Web framework ──
+fastapi==0.115.0
+uvicorn[standard]==0.30.0
+python-multipart==0.0.12
+python-dotenv
+httpx
+
+# ── Database (Postgres / Neon) ──
+sqlalchemy[asyncio]==2.0.35
+asyncpg==0.30.0
+
+# ── Auth ──
+bcrypt==4.2.0
+pyjwt==2.9.0
+
+# ── OpenAI (transcription, translation, TTS) ──
+openai>=1.0.0
+
+# ── Audio preprocessing (required by the OpenAI transcription path) ──
+numpy
+librosa
+soundfile
+
+# ── TTS fallbacks ──
+edge-tts
+gTTS

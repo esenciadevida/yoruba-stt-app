@@ -1,0 +1,44 @@
+# ── Web framework (FastAPI backend) ──
+fastapi
+uvicorn[standard]
+python-multipart
+SQLAlchemy
+asyncpg
+pydantic
+python-dotenv
+PyJWT
+bcrypt
+cryptography
+
+# ── OpenAI (gpt-4o-transcribe, code-switch, GPT translation, TTS) ──
+openai
+httpx
+
+# ── Text-to-speech ──
+edge-tts
+gTTS
+
+# ── Machine learning (ASR + NMT) ──
+torch
+torchaudio
+transformers
+accelerate
+safetensors
+sentencepiece
+librosa
+soundfile
+numpy
+scipy
+datasets
+sentence-transformers
+
+# ── Misc ──
+requests
+aiohttp
+Pillow
+
+# ── Streamlit (legacy app) ──
+streamlit
+
+# ── Testing ──
+pytest

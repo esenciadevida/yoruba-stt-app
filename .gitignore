@@ -1,0 +1,61 @@
+# ── Secrets ──
+# Covers .env, backend/.env, frontend/.env.local
+.env
+.env.local
+.env.*.local
+
+# ── Python ──
+*.pyc
+__pycache__/
+*.pyo
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+
+# ── Node / Next.js ──
+node_modules/
+.next/
+out/
+next-env.d.ts
+
+# ── OS / IDE ──
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# ── ML models (multi-GB, must never be committed) ──
+models/
+yoruba_model/
+yoruba_whisper_model/
+*.bin
+*.safetensors
+*.pt
+*.pth
+*.onnx
+
+# ── Training data ──
+bibletts_yoruba/
+yoruba/
+
+# ── User data / audio ──
+# Uploaded recordings are runtime state, and on a free host the filesystem is
+# wiped on every redeploy anyway.
+backend/uploads/
+data/users.json
+*.wav
+*.mp3
+*.m4a
+*.ogg
+*.flac
+test_edge.mp3
+
+# ── Logs ──
+*.log
