@@ -64,6 +64,8 @@ test_edge.mp3
 # ── Neon / agent configs ──
 .neon
 .agents/
+.kilo/
+.vercel/
 
 # ── Package manager lockfiles (managed per-deploy) ──
 package-lock.json
