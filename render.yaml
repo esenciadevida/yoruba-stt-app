@@ -9,9 +9,9 @@ services:
     healthCheckPath: /api/health
     envVars:
       - key: DATABASE_URL
-        value: postgresql+asyncpg://neondb_owner:REDACTED@ep-dawn-frog-b5liv8zt-pooler.c-7.us-east-2.aws.neon.tech/neondb?channel_binding=require&sslmode=require
+        value: postgresql+asyncpg://neondb_owner:REDACTED@ep-dawn-frog-b5liv8zt-pooler.c-7.us-east-2.aws.neon.tech/neondb
       - key: DATABASE_URL_SYNC
-        value: postgresql+psycopg://neondb_owner:REDACTED@ep-dawn-frog-b5liv8zt.c-7.us-east-2.aws.neon.tech/neondb?channel_binding=require&sslmode=require
+        value: postgresql+psycopg://neondb_owner:REDACTED@ep-dawn-frog-b5liv8zt.c-7.us-east-2.aws.neon.tech/neondb?sslmode=require
       - key: JWT_SECRET
         value: REDACTED
       - key: OPENAI_API_KEY
