@@ -33,7 +33,7 @@ export default function DashboardPage() {
   return (
     <>
       {toast && <Toast message={toast.message} type={toast.type} onDismiss={() => setToast(null)} />}
-      <div className="max-w-2xl mx-auto space-y-5">
+      <div className="max-w-3xl mx-auto space-y-6">
         {hydrated && showOnboarding && <OnboardingCard onDismiss={dismissOnboarding} />}
         <STTTab showToast={setToast} />
       </div>
