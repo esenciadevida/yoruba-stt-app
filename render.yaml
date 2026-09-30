@@ -1,11 +1,13 @@
 services:
-  # ─── Backend (FastAPI in Docker) ───
+  # ─── Backend (FastAPI) ───
   - type: web
     name: bami-soro-backend
     region: oregon
     plan: free
-    env: docker
-    dockerfilePath: backend/Dockerfile
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r requirements-host.txt gunicorn
+    startCommand: sh -c 'exec gunicorn main:app -w 1 -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT'
     healthCheckPath: /api/health
     envVars:
       - key: DATABASE_URL
@@ -32,7 +34,7 @@ services:
     plan: free
     rootDir: frontend
     buildCommand: npm install && npm run build
-    startCommand: npx next start -p $PORT
+    startCommand: sh -c 'exec npx next start -p $PORT'
     envVars:
       - key: NEXT_PUBLIC_API_URL
         value: https://bami-soro-backend.onrender.com
