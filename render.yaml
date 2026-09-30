@@ -5,8 +5,7 @@ services:
     plan: free
     env: docker
     dockerfilePath: backend/Dockerfile
-    build:
-      dockerfilePath: backend/Dockerfile
+    healthCheckPath: /api/health
     envVars:
       - key: DATABASE_URL
         fromSecret: neon-postgres-url
@@ -24,5 +23,3 @@ services:
         value: 5
       - key: NLLB_MODEL
         value: facebook/nllb-200-distilled-600M
-      - key: PORT
-        value: 8000
