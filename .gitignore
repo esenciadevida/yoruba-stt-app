@@ -32,7 +32,8 @@ Thumbs.db
 *.swo
 
 # ── ML models (multi-GB, must never be committed) ──
-models/
+# Anchor to root so backend/models/ (SQLAlchemy definitions) is NOT ignored.
+/models/
 yoruba_model/
 yoruba_whisper_model/
 *.bin
