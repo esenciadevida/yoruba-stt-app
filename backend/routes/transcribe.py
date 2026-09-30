@@ -157,13 +157,12 @@ async def _run_pipeline(
     # the raw text through a language model that fixes orthography, tone
     # marks and subdot letters (ẹ ọ ṣ) without changing meaning.
     #
-    # SKIP for gpt-4o-transcribe: it already produces correct, tone-marked
-    # Yoruba output. Running GPT-4o-mini review on it risks corrupting
-    # correct text (wrong "corrections", removed words, altered spellings).
+    # Runs for ALL engines — including gpt-4o-transcribe, which produces
+    # tone-marked output but still makes tone-mark errors that the review
+    # pass corrects safely (rule: "if uncertain, leave unchanged").
     if (not code_switched
             and final_lang in ("yo", "yor", "yoruba")
-            and (raw_text or "").strip()
-            and engine not in ("gpt-4o-transcribe",)):
+            and (raw_text or "").strip()):
         from services.transcription_review import review_transcription
         reviewed, was_reviewed = await asyncio.to_thread(
             review_transcription, raw_text, final_lang
@@ -171,27 +170,20 @@ async def _run_pipeline(
         if was_reviewed:
             final_text = reviewed
         else:
-            # Review unavailable/failed -> fall back to rule-based tone
-            # restoration, but only on reliable (non-garbled) output and
-            # only for engines that don't already emit tone-marked Yoruba.
+            # Review returned no changes or is unavailable: fall back to
+            # rule-based tone restoration for text lacking diacritics.
             if (confidence or 0) >= 0.6:
-                final_text = await asyncio.to_thread(restore_tones, raw_text)
-            else:
-                final_text = raw_text
-    elif not code_switched and (raw_text or "").strip():
-        # For gpt-4o-transcribe: usually produces correct tone-marked Yoruba
-        # directly, but occasionally emits plain ASCII Yoruba (e.g. "awon"
-        # instead of "Àwọn"). When that happens, run the rule-based tone
-        # restorer so known words get their marks back.
-        final_text = raw_text
-        if final_lang in ("yo", "yor", "yoruba"):
-            _YORUBA_DIACRITICS = set(
-                "\u1eb9\u1ecd\u1e63\u00e1\u00e0\u00e9\u00e8"
-                "\u00ed\u00ec\u00f3\u00f2\u00fa\u00f9"
-            )
-            has_marks = any(c in _YORUBA_DIACRITICS for c in raw_text)
-            if not has_marks:
-                final_text = await asyncio.to_thread(restore_tones, raw_text)
+                _YORUBA_DIACRITICS = set(
+                    "\u1eb9\u1ecd\u1e63\u00e1\u00e0\u00e9\u00e8"
+                    "\u00ed\u00ec\u00f3\u00f2\u00fa\u00f9"
+                )
+                has_marks = any(c in _YORUBA_DIACRITICS for c in final_text)
+                if not has_marks:
+                    final_text = await asyncio.to_thread(restore_tones, final_text)
+    elif (raw_text or "").strip() and (confidence or 0) >= 0.6:
+        # Non-Yoruba final_lang: still apply rule-based tone restoration
+        # for plain (un-toned) Yoruba text as a safety net.
+        final_text = await asyncio.to_thread(restore_tones, final_text)
 
     # Safety net: restore English words that accidentally received Yoruba
     # tone marks / subdot letters from the ASR or the code-switch pass.
