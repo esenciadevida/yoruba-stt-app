@@ -67,3 +67,6 @@ test_edge.mp3
 
 # ── Package manager lockfiles (managed per-deploy) ──
 package-lock.json
+
+.vercel
+.env*
