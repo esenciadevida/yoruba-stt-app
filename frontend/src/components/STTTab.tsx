@@ -589,11 +589,14 @@ export function STTTab({ showToast }: STTTabProps) {
     <div className="max-w-2xl mx-auto space-y-5">
       {/* Recording Section */}
       <div className="card p-6">
-        <div className="flex items-center justify-between mb-5">
+        <div className="mb-5">
           <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
             <Mic size={16} className="text-blue-600 dark:text-blue-400" />
             Record Audio
           </h3>
+          <p className="text-xs text-muted mt-1">
+            Speak Yorùbá or English. We automatically detect the language and handle code-switching mid-sentence.
+          </p>
         </div>
 
         {isRecording ? (
@@ -741,9 +744,23 @@ export function STTTab({ showToast }: STTTabProps) {
                 <Mic size={28} className="text-white" />
               </div>
             </button>
-            <p className="text-center text-xs text-muted font-medium">Tap to start recording</p>
+            <div className="text-center">
+              <p className="text-center text-xs text-muted font-medium">Tap to start recording</p>
+              <p className="text-xs text-muted mt-1.5 max-w-xs mx-auto">
+                Records in WebM/Opus format. Supports up to 5 minutes per session.
+              </p>
+            </div>
           </div>
         )}
+      </div>
+
+      <div className="relative my-2">
+        <div className="absolute inset-0 flex items-center">
+          <div className="w-full border-t border-border"></div>
+        </div>
+        <div className="relative flex justify-center">
+          <span className="px-2 text-xs text-muted bg-background">or</span>
+        </div>
       </div>
 
       {/* Draft Review — Step 2: user reads/edits the raw speech text before
@@ -752,10 +769,15 @@ export function STTTab({ showToast }: STTTabProps) {
       {draftText && !loading && !polishing && !result && (
         <div className="card p-6 animate-fade-in">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
-              <FileText size={16} className="text-blue-600 dark:text-blue-400" />
-              Draft text (from speech)
-            </h3>
+            <div>
+              <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
+                <FileText size={16} className="text-blue-600 dark:text-blue-400" />
+                Draft text (from speech)
+              </h3>
+              <p className="text-xs text-muted mt-0.5">
+                Review and edit the raw speech-to-text output before translating or polishing.
+              </p>
+            </div>
             <div className="flex items-center gap-2">
               {draftEngine && <span className="badge badge-slate">{draftEngine}</span>}
               {draftConfidence != null && draftConfidence > 0 && (
@@ -852,10 +874,15 @@ export function STTTab({ showToast }: STTTabProps) {
       {/* Upload Section */}
       {!isRecording && !audioBlob && (
         <div className="card p-6">
-          <h3 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
-            <Upload size={16} className="text-blue-600 dark:text-blue-400" />
-            Upload Audio
-          </h3>
+          <div className="mb-4">
+            <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
+              <Upload size={16} className="text-blue-600 dark:text-blue-400" />
+              Upload Audio
+            </h3>
+            <p className="text-xs text-muted mt-1">
+              Upload pre-recorded audio files for transcription
+            </p>
+          </div>
           <div
             onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
             onDragLeave={() => setDragOver(false)}
@@ -867,11 +894,17 @@ export function STTTab({ showToast }: STTTabProps) {
                 : "border-slate-200 dark:border-white/10 hover:border-blue-300 dark:hover:border-blue-500/30 hover:bg-blue-50/50 dark:hover:bg-blue-500/5"
             }`}
           >
-            <Upload size={24} className="mx-auto text-slate-400 dark:text-slate-500 mb-3" />
-            <p className="text-sm text-slate-600 dark:text-slate-400">
-              Drag and drop or <span className="text-blue-600 dark:text-blue-400 font-medium">browse</span>
-            </p>
-            <p className="text-xs text-muted mt-1.5">WAV, MP3, WebM, OGG up to 25MB each · Multiple files supported</p>
+            <div className="flex flex-col items-center gap-3">
+              <Upload size={28} className="text-slate-400 dark:text-slate-500" />
+              <div>
+                <p className="text-sm font-medium text-foreground mb-1">
+                  Drag and drop or <span className="text-blue-600 dark:text-blue-400">browse</span> files
+                </p>
+                <p className="text-xs text-muted">
+                  WAV, MP3, WebM, OGG up to 25MB · Multiple files supported
+                </p>
+              </div>
+            </div>
             <input ref={fileInputRef} type="file" accept="audio/*" multiple className="hidden" onChange={(e) => {
               const files = Array.from(e.target.files || []);
               if (files.length === 1) handleFile(files[0]);
@@ -1162,13 +1195,24 @@ export function STTTab({ showToast }: STTTabProps) {
       )}
 
       {/* Empty state */}
-      {!result && !loading && !audioBlob && !isRecording && (
-        <div className="card p-12 text-center">
-          <div className="w-16 h-16 mx-auto rounded-2xl bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center mb-4">
-            <Mic size={28} className="text-blue-400 dark:text-blue-500" />
+      {!result && !loading && !audioBlob && !isRecording && !batchResults.length && (
+        <div className="card p-12 text-center animate-fade-in">
+          <div className="w-20 h-20 mx-auto rounded-3xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center mb-5 shadow-xl shadow-blue-500/25">
+            <Mic size={32} className="text-white" />
           </div>
-          <p className="text-sm font-semibold text-foreground">Your transcription will appear here</p>
-          <p className="text-xs text-muted mt-1.5 max-w-xs mx-auto">Record or upload an audio file to begin transcribing Yoruba speech</p>
+          <h3 className="text-lg font-semibold text-foreground mb-2">
+            Your transcription will appear here
+          </h3>
+          <p className="text-sm text-muted mb-6 max-w-sm mx-auto">
+            Record audio with your microphone or upload an audio file to begin transcribing Yorùbá or English speech.
+          </p>
+          <button
+            onClick={() => { setMicError(null); startRecording(); }}
+            className="btn-primary flex items-center gap-2 mx-auto"
+          >
+            <Mic size={16} />
+            Start Recording
+          </button>
         </div>
       )}
     </div>
