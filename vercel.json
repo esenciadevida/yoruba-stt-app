@@ -1,11 +1,3 @@
 {
-  "rootDirectory": "frontend",
-  "env": {
-    "NEXT_PUBLIC_API_URL": "https://bami-soro-backend.onrender.com"
-  },
-  "build": {
-    "env": {
-      "NEXT_PUBLIC_API_URL": "https://bami-soro-backend.onrender.com"
-    }
-  }
+  "rootDirectory": "frontend"
 }
