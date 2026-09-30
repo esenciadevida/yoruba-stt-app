@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: bami-soro-backend
+    region: oregon
+    plan: free
+    env: docker
+    dockerfilePath: backend/Dockerfile
+    build:
+      dockerfilePath: backend/Dockerfile
+    envVars:
+      - key: DATABASE_URL
+        fromSecret: neon-postgres-url
+      - key: DATABASE_URL_SYNC
+        fromSecret: neon-postgres-url-sync
+      - key: JWT_SECRET
+        fromSecret: jwt-secret
+      - key: OPENAI_API_KEY
+        fromSecret: openai-api-key
+      - key: CORS_ORIGINS
+        value: https://yoruba-stt-app.vercel.app,http://localhost:3000,http://127.0.0.1:3000
+      - key: DB_POOL_SIZE
+        value: 5
+      - key: DB_MAX_OVERFLOW
+        value: 5
+      - key: NLLB_MODEL
+        value: facebook/nllb-200-distilled-600M
+      - key: PORT
+        value: 8000
