@@ -62,7 +62,7 @@ test_edge.mp3
 *.log
 
 # ── Neon / agent configs ──
-.neon/
+.neon
 .agents/
 
 # ── Package manager lockfiles (managed per-deploy) ──
