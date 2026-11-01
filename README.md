@@ -67,4 +67,4 @@ The hosted demo is currently offline while it's being redeployed. To run it, fol
 
 ## License
 
-Released under the [MIT License](LICENSE).
+© 2026 Samuel Ogundare. All rights reserved. No permission is granted to copy, modify, redistribute, or deploy this code without written permission.
