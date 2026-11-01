@@ -67,4 +67,4 @@ The hosted demo is currently offline while it's being redeployed. To run it, fol
 
 ## License
 
-No license has been applied yet. Treat the code as all rights reserved until one is added.
+Released under the [MIT License](LICENSE).
